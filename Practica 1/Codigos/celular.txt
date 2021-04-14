@@ -1,0 +1,4 @@
+ 45 40000.00$  Xiaomi Redmi N9  80 10  Nuevo
+ 18 20000.00$  Samsung J7Pro  70 5  Usado
+ 7 15000.00$  Huawei P8  15 25  Usado
+ 55 100000.00$  Apple Iphone 11  120 40  Nuevo

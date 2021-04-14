@@ -1,0 +1,5 @@
+ 1  Escoba 150.00 15 10
+ 2  Trapo 20.00 60 30
+ 3  Lavandina 80.00 80 40
+ 4  Aspiradora 1200.00 50 25
+ 5  Lustra muebles 150.00 80 63

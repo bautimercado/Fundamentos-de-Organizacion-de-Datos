@@ -1,0 +1,24 @@
+1 Marcelo
+1200
+1 Marcelo
+800
+1 Marcelo
+450
+2 Angeles
+2000
+2 Angeles
+500
+3 Fabian
+600
+3 Fabian
+4000
+4 Carlos
+5000
+5 Lucia
+700
+5 Lucia 
+400
+5 Lucia 
+1000
+5 Lucia 
+1500

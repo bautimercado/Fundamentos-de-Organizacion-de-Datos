@@ -1,0 +1,15 @@
+12 Mercado 
+Bautista 
+1 7
+13 Tesone 
+Fernando  
+0 30
+14 Cosme 
+Fulanito 
+5 17
+15 White 
+Walter 
+4 2
+16 Zidane 
+Zinedine 
+0 30

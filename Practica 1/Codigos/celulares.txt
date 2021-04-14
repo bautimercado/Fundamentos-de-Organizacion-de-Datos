@@ -1,0 +1,8 @@
+45 40000 Xiaomi, RedmiN9
+80 10 Nuevo
+18 20000 Samsung J7Pro
+70 5 Usado
+7 15000 Huawei P8
+15 25 Usado
+55 100000 Apple Iphone11
+120 40 Nuevo

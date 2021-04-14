@@ -1,0 +1,14 @@
+1 1500 Terror
+Carrie
+2 2000 fantasia
+Harry Potter
+3 500 Programacion
+Como programar en Java
+4 800 Drama
+Buscando a Alaska
+5 1000 Terror
+Todo es eventual
+6 1800 Terror
+Cementerio de animales
+7 900 Programacion
+Introduccion a las Bases de Datos
