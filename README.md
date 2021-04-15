@@ -1,4 +1,4 @@
-FUNDAMENTOS DE ORGANIZACION DE DATOS
+#FUNDAMENTOS DE ORGANIZACION DE DATOS
 
   Practica 1:
     .- Basico, generar archivos binarios 
