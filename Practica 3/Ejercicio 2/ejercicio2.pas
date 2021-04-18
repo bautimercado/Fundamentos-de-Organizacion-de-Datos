@@ -75,15 +75,15 @@ var
 	reg : tEmpleado;
 begin
 	reset(archivo);
+	leerRegistro(archivo, reg);
 	while (not eof(archivo)) do begin
-		read(archivo, reg);
 		with reg do
 			writeln(nombre,' ',apellido,' ',dni,' ',fechaNacimiento);
+		leerRegistro(archivo, reg);
 	end;
 	
 	close(archivo);
 end;
-
 
 //Programa principal
 var

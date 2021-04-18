@@ -16,6 +16,14 @@ type
 	
 	archivo_novelas = file of tNovela;
 
+procedure leerRegistro (var arc : archivo_novelas; var reg : tNovela);
+begin
+	if (not eof(arc)) then
+		read(arc, reg)
+	else
+		reg.nombre := valorAlto;
+end;
+
 procedure nombrarArchivo (var archivo : archivo_novelas);
 var
 	nombre_archivo : String;
@@ -123,13 +131,15 @@ begin
 	reset(archivo);
 	
 	writeln('Ingrese el codigo de la novela que desee modificar'); readln(cod);
-	read(archivo, reg);
-	while ((not eof(archivo)) and (reg.codigo <> cod)) do
-		read(archivo, reg);
+	leerRegistro(archivo, reg);
+	while ((reg.nombre <> valorAlto) and (reg.codigo <> cod)) do
+		leerRegistro(archivo, reg);
 		
 	if (reg.codigo = cod) then begin
 		nuevaNovela.codigo := reg.codigo;
 		leerNovelaSinCodigo(nuevaNovela);
+		seek(archivo, filepos(archivo) - 1);
+		write(archivo, nuevaNovela);
 	end
 	else
 		writeln('No se encontro a una novela con codigo ',cod);
@@ -147,28 +157,26 @@ begin
 	reset(archivo);
 	
 	writeln('Ingrese el codigo de novela a eliminar'); readln(cod);
-	read(archivo, reg);
-	while ((not eof(archivo)) and (reg.codigo <> cod)) do
-		read(archivo, reg);
+	//registro cabecera
+	read(archivo, regC);
+
+	leerRegistro(archivo, reg);
+	while ((reg.nombre <> valorAlto) and (reg.codigo <> cod)) do
+		leerRegistro(archivo, reg);
 		
 	if (reg.codigo <> cod) then
 		writeln('No se encontro una novela con codigo ',cod)
 	
 	else begin
-		//guardo la pos donde encontre el registro a eliminar
+		//guardo la pos donde encontre el registro a eliminar. pos = nrr
 		pos := filepos(archivo) - 1;
-		//voy al reg cabecera y lo leo
-		seek(archivo, 0);
-		read(archivo, regC);
-		//asigno a una variable el contenido del cabecera
-		reg.codigo := regC.codigo;
+		//escribo el contenido del reg.cabecera
+		seek(archivo, pos);
+		write(archivo, regC);
 		//actualizo el reg cabecera
 		seek(archivo, 0);
 		regC.codigo := -1 * pos;
 		write(archivo, regC);
-		//elimino logicamente el registro
-		seek(archivo, pos);
-		write(archivo, reg);
 	end;
 	
 	close(archivo);
@@ -207,10 +215,11 @@ begin
 	
 	//read(archivo,reg);
 	//no hay que omitir el registro cabecera
-	while (not eof(archivo)) do begin
-		read(archivo, reg);
+	leerRegistro(archivo, reg);
+	while (reg.nombre <> valorAlto) do begin
 		with reg do
 			writeln(texto,' ',codigo,' ',nombre,' ',genero,' ',duracion,' ',precio);
+		leerRegistro(archivo, reg);
 	end;
 	
 	close(texto); close(archivo);

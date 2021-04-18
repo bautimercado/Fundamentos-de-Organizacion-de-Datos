@@ -1,5 +1,8 @@
 program seis;
 
+const
+	valorAlto = 32767;
+
 type
 	str20 = String[20];
 
@@ -16,6 +19,14 @@ type
 	
 	//este archivo posee los codigos de prenda que se tienen que hay que dar de baja
 	archivo_detalle = file of integer;
+
+procedure leerRegistroMaestro (var arc : archivo_maestro; var reg : tPrenda);
+begin
+	if (not eof(arc)) then
+		read(arc, reg)
+	else
+		reg.cod_prenda := valorAlto;
+end;
 	
 //no se usa lista invertida
 procedure darBaja (var archivo : archivo_maestro; unCodigo : integer);
@@ -23,14 +34,13 @@ var
 	unaPrenda : tPrenda;
 begin
 	reset(archivo);
-	read(archivo, unaPrenda);
+	leerRegistroMaestro(archivo, unaPrenda);
 	
-	while ((not eof(archivo)) and (unaPrenda.cod_prenda <> unCodigo)) do
-		read(archivo, unaPrenda);
+	while ((unaPrenda.cod_prenda <> valorAlto) and (unaPrenda.cod_prenda <> unCodigo)) do
+		leerRegistroMaestro(archivo, unaPrenda);
 		
-	if (unaPrenda.cod_prenda <> unCodigo) then
-		writeln('No se encontro una prenda con el codigo ',unCodigo)
-	else begin
+	//los detalle tienen info que estan en el maestro
+	if (unaPrenda.cod_prenda = unCodigo) then begin
 		//el stock en negativo me indica que el registro esta eliminado
 		unaPrenda.stock := -1 * unaPrenda.stock;
 		seek(archivo, filepos(archivo) - 1);
@@ -40,7 +50,7 @@ begin
 	close(archivo);
 end;	
 	
-procedure darBajaLogica (var archivo : archivo_maestro; var det : archivo_detalle);
+procedure recorrerDetalle (var archivo : archivo_maestro; var det : archivo_detalle);
 var
 	unCodigo : integer;
 begin
@@ -75,7 +85,7 @@ begin
 	assign(archivo, 'archivo_prendas'); 
 	assign(detalle, 'detalle');
 	assign(compacto, 'nuevas_prendas');
-	darBajaLogica(archivo, detalle);
+	recorrerDetalle(archivo, detalle);
 	compactarArchivo(archivo, compacto);
 	rename(archivo, 'prendas_viejas');
 end.

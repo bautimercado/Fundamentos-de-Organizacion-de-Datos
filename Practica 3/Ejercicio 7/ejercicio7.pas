@@ -2,6 +2,7 @@ program siete;
 
 const
 	corte = '5000000';
+	valorAlto = 'zzzzzzzzzz';
 	
 type
 	str15 = String[15];
@@ -15,15 +16,23 @@ type
 	end;
 	
 	archivo_aves = file of tAve;
+
+procedure leerRegistro (var arc : archivo_aves; var reg : tAve);
+begin
+	if (not eof(arc)) then
+		read(arc, reg)
+	else
+		reg.codigo := valorAlto;
+end;
 	
 procedure bajaLogica (var archivo : archivo_aves; unCodigo : str15);
 var
 	unAve : tAve;
 begin
 	reset(archivo);
-	read(archivo,unAve);
+	leerRegistro(archivo, unAve);
 	
-	while ((not eof(archivo)) and (unAve.codigo <> unCodigo)) do
+	while ((unAve.codigo <> valorAlto) and (unAve.codigo <> unCodigo)) do
 		read(archivo, unAve);
 	
 	if (unAve.codigo = unCodigo) then
@@ -70,8 +79,9 @@ var
 	unAve : tAve;
 begin
 	reset(archivo);
-	
-	while (not eof(archivo)) do begin
+	leerRegistro(archivo, unAve);
+
+	while (unAve.codigo <> valorAlto) do begin
 		read(archivo, unAve);
 		if (unAve.codigo = '***') then 
 			llevarAlFinal(archivo, unAve, (filepos(archivo) - 1));

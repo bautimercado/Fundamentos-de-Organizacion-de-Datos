@@ -2,14 +2,25 @@ program cuatro;
 
 uses sysutils;
 
+const
+	valorAlto = 'zzzzzzzzzz';
+
 type
 	tTitulo = String[50];
 	
 	tArchRevistas = file of tTitulo;
+
+procedure leerRegistro (var arc : tArchRevistas; var reg : tTitulo);
+begin
+	if (not eof(arc)) then
+		read(arc, reg)
+	else
+		reg := valorAlto;
+end;
 	
 procedure darDeAlta (var a : tArchRevistas; titulo : String);
 var
-	unTitulo : String[50];
+	unTitulo : tTitulo;
 	cabecera, cod : integer;
 begin
 	reset(a);
@@ -40,14 +51,16 @@ end;
 
 procedure listarDatos (var archivo : tArchRevistas; var texto : Text);
 var
-	unTitulo : String[50];
+	unTitulo : tTitulo;
 begin
 	reset(archivo); rewrite(texto);
+
+	leerRegistro(archivo, unTitulo);
 	
-	while (not eof(archivo)) do begin
-		read(archivo, unTitulo);
+	while (unTitulo <> valorAlto) do begin
 		if (unTitulo > '9') then
 			writeln(texto,' ',unTitulo);
+		leerRegistro(archivo, unTitulo);
 	end;
 	
 	close(texto); close(archivo);
@@ -57,7 +70,7 @@ end;
 var
 	archivo : tArchRevistas;
 	texto : Text;
-	titulo : String[50];
+	titulo : tTitulo;
 begin
 	assign(archivo, 'revistas');
 	assign(texto, 'revistas.txt');

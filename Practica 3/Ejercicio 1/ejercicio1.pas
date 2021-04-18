@@ -14,6 +14,14 @@ type
 	
 	archivoEmpleado = file of empleado;
 	
+procedure leerRegistro (var arc : archivoEmpleado; var reg : empleado);
+begin
+	if (not eof(arc)) then
+		read(arc, reg)
+	else
+		reg.apellido := corte;
+end;
+
 procedure leerEmpleado (var unEmpleado : empleado);
 begin
 	with unEmpleado do begin
@@ -45,11 +53,12 @@ var
 	unEmpleado : empleado;
 begin
 	reset(archivo);
-	while (not eof(archivo)) do begin
-		read(archivo,unEmpleado);
+	leerRegistro(archivo, unEmpleado);
+	while (unEmpleado.apellido <> corte) do begin
 		if ((unEmpleado.nombre = unNombre) or (unEmpleado.apellido = unApellido)) then
 			with unEmpleado do
 				writeln('Nombre: ',nombre,' Apellido: ',apellido,' Edad: ',edad,' DNI: ',dni,' Nro de empleado: ',numero); 
+		leerRegistro(archivo, unEmpleado);
 	end;
 	close(archivo);
 end;
@@ -59,10 +68,11 @@ var
 	unEmpleado : empleado;
 begin
 	reset(archivo);
-	while (not eof(archivo)) do begin
-		read(archivo,unEmpleado);
+	leerRegistro(archivo, unEmpleado);
+	while (unEmpleado.apellido <> corte) do begin
 		with unEmpleado do
 			writeln('Nombre: ',nombre,' Apellido: ',apellido,' Edad: ',edad,' DNI: ',dni,' Nro de empleado: ',numero);
+		leerRegistro(archivo, unEmpleado);
 	end;
 	close(archivo);
 end;
@@ -72,11 +82,12 @@ var
 	unEmpleado : empleado;
 begin
 	reset(archivo);
-	while (not eof(archivo)) do begin
-		read(archivo,unEmpleado);
+	leerRegistro(archivo, unEmpleado);
+	while (unEmpleado.apellido <> corte) do begin
 		if (unEmpleado.edad > 70) then
 			with unEmpleado do
 				writeln('Nombre: ',nombre,' Apellido: ',apellido,' Edad: ',edad,' DNI: ',dni,' Nro de empleado: ',numero);
+		leerRegistro(archivo, unEmpleado);
 	end;
 	close(archivo);
 end;
@@ -158,12 +169,12 @@ var
 begin
 	reset(archivo);
 	writeln('Ingrese DNI a eliminar: '); readln(dniEliminar);
-	read(archivo, unEmpleado);
+	leerRegistro(archivo, unEmpleado);
 	
-	while ((not eof(archivo)) and (unEmpleado.dni <> dniEliminar)) do
-		read(archivo, unEmpleado);
+	while ((unEmpleado.apellido <> corte) and (unEmpleado.dni <> dniEliminar)) do
+		leerRegistro(archivo, unEmpleado);
 		
-	if (not eof(archivo)) then begin
+	if (unEmpleado.dni = dniEliminar) then begin
 		//guardo la posicion donde se encontro el registro a eliminar
 		pos := filepos(archivo) - 1;
 		//voy al ultimo registro

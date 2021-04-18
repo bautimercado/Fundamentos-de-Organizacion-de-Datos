@@ -2,14 +2,25 @@ program cinco;
 
 uses sysutils;
 
+const
+	valorAlto = 'zzzzzzzzzzzzz';
+
 type
 	tTitulo = String[50];
 	
 	tArchRevistas = file of tTitulo;
+
+procedure leerRegistro (var arc : tArchRevistas; var reg : tTitulo);
+begin
+	if (not eof(arc)) then
+		read(arc, reg)
+	else
+		reg := valorAlto;
+end;
 	
 procedure darDeAlta (var a : tArchRevistas; titulo : String);
 var
-	unTitulo : String[50];
+	unTitulo : tTitulo;
 	cabecera, cod : integer;
 begin
 	reset(a);
@@ -40,14 +51,16 @@ end;
 
 procedure listarDatos (var archivo : tArchRevistas; var texto : Text);
 var
-	unTitulo : String[50];
+	unTitulo : tTitulo;
 begin
 	reset(archivo); rewrite(texto);
+
+	leerRegistro(archivo, unTitulo);
 	
-	while (not eof(archivo)) do begin
-		read(archivo, unTitulo);
+	while (unTitulo <> valorAlto) do begin
 		if (unTitulo > '9') then
 			writeln(texto,' ',unTitulo);
+		leerRegistro(archivo, unTitulo);
 	end;
 	
 	close(texto); close(archivo);
@@ -55,38 +68,39 @@ end;
 
 procedure eliminar (var a: tArchRevistas ; titulo: string);
 var
-	unTitulo : String[50];
-	pos : integer;
+	unTitulo, cabecera, aux : tTitulo;
+	pos, cod : integer;
 begin
 	reset(a);
-	read(a, unTitulo);
+	read(a, cabecera);
+
+	leerRegistro(a, unTitulo);
 	
-	while ((not eof(a)) and (unTitulo <> titulo)) do
+	while ((unTitulo <> valorAlto) and (unTitulo <> titulo)) do
 		read(a, unTitulo);
 		
 	if (unTitulo <> titulo) then
 		writeln('No se encontro a una revista con el titulo ',titulo)
+
 	else begin
+		//guardo el nrr
 		pos := filepos(a) - 1;
-		//voy a la cabecera
-		seek(a, 0);
-		read(a, unTitulo);
+		//escribo en el lugar encontrado el contenido del cabecera
+		seek(a, pos);
+		write(a, cabecera);
 		//escribo en la cabecera la posicion del nuevo elemento borrado
 		seek(a, 0);
 		write(a, IntToStr(pos));
-		//borro el registro
-		seek(a, pos);
-		write(a, unTitulo);
-		
 	end;
 	
+	close(a);
 end;
 
 //Programa principal
 var
 	archivo : tArchRevistas;
 	texto : Text;
-	titulo : String[50];
+	titulo : tTitulo;
 begin
 	assign(archivo, 'revistas');
 	assign(texto, 'revistas.txt');
