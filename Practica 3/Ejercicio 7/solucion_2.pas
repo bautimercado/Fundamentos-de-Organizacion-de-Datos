@@ -60,33 +60,37 @@ begin
 	end; 
 end;
 
-procedure llevarAlFinal (var archivo : archivo_aves; unAve : tAve; pos : integer);
+procedure llevarAlFinal (var archivo : archivo_aves; unAve : tAve; pos, cant : integer);
 var
 	aux : tAve;
 begin
-	seek(archivo, filesize(archivo) - 1);
+	seek(archivo, filesize(archivo) - cant);
 	read(archivo, aux);
 	seek(archivo, filepos(archivo) - 1);
 	write(archivo, unAve);
 	seek(archivo, pos);
 	write(archivo, aux);
-	seek(archivo, filepos(archivo) - 1);
-	truncate(archivo);
 end;
 
 procedure compactarArchivo (var archivo : archivo_aves);
 var
 	unAve : tAve;
+	cant : integer;
 begin
 	reset(archivo);
 	leerRegistro(archivo, unAve);
+	cant := 0;
 
 	while (unAve.codigo <> valorAlto) do begin
-		if (unAve.codigo = '***') then 
-			llevarAlFinal(archivo, unAve, (filepos(archivo) - 1));
+		if (unAve.codigo = '***') then begin
+			cant := cant + 1;
+			llevarAlFinal(archivo, unAve, (filepos(archivo) - 1), cant);
+		end;
 		leerRegistro(archivo, unAve);
 	end;
 	
+	seek(archivo, filesize(archivo) - cant);
+	truncate(archivo);
 	close(archivo);
 end;
 
@@ -98,4 +102,3 @@ begin
 	darDeBaja(archivo);
 	compactarArchivo(archivo);
 end.
-		

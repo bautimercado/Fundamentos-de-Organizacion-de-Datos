@@ -68,13 +68,26 @@ var
 begin
 	reset(archivo); rewrite(compacto);
 	
-	while (not eof(archivo)) do begin
-		read(archivo, unaPrenda);
+	leerRegistroMaestro(archivo, unaPrenda);
+	
+	while (unaPrenda.cod_prenda <> valorAlto) do begin
 		if (unaPrenda.stock >= 0) then 
 			write(compacto, unaPrenda);
+		leerRegistroMaestro(archivo, unaPrenda);
 	end; 
 	
 	close(compacto); close(archivo);
+end;
+
+//preguntar por esto. . .
+procedure renombrarArchivos (var arc, compacto : archivo_maestro);
+begin
+	reset(arc);
+	rename(arc, 'original');
+	close(arc);
+	erase(arc);
+	rename(compacto, 'nuevo');
+	close(compacto);
 end;
 
 //Programa principal
@@ -87,5 +100,5 @@ begin
 	assign(compacto, 'nuevas_prendas');
 	recorrerDetalle(archivo, detalle);
 	compactarArchivo(archivo, compacto);
-	rename(archivo, 'prendas_viejas');
+	renombrarArchivos(archivo, compacto);
 end.
