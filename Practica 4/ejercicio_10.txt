@@ -1,0 +1,65 @@
+10. Dado el siguiente árbol B de orden 6, mostrar como quedaría el mismo luego de realizar
+las siguientes operaciones: +15, +71, +3, +48, -56, -71.
+Política de resolución de underflows: derecha o izquierda.
+    0: (34) (56) (78) (100) (176)
+
+Operación +15:
+    - Leo la raíz, al querer agregar el elemento 15 en este nodo (es el único del árbol) 
+    se produce overflow (L0)
+    - La 1ra mitad de los elementos (15, 34, 56) quedan en el nodo 0 (E0)
+    - La 2da mitad de los elementos (78, 100, 176) quedan en el nuevo nodo 1 (E1)
+    - El elemento más chico de la 2da mitad (78) se promociona al nuevo padre (nodo 2, E2)
+    - El árbol quedaría asi:
+
+        2: 0(78)1
+0: (15)(34)(56)  1: (100)(176)  
+
+Operación +71:
+    - Leo la raíz, 71 es menor que el elemento 78, por lo tanto bifurco al nodo 0 (L2)
+    - Leo el nodo 0, como el árbol es de orden 6 y el nodo 0 contiene 3 claves hasta el momento, insertar
+    ordenado el elemento 71 no produce overflow. (L0, E0)
+    - El árbol B quedaría asi:
+
+            2: 0(78)1
+0: (15)(34)(56)(71)  1: (100)(176)
+
+Operación +3:
+    - Leo la raíz, 3 es menor que 78, por lo tanto bifurco al nodo 0 (L2)
+    - Leo el nodo 0, insertar ordenado el elemento 3 en este nodo NO me produce overflow (L0, E0)
+
+            2: 0(78)1
+0: (3)(15)(34)(56)(71)  1: (100)(176)
+
+Operación +48:
+    - Leo la raíz, 48 es menor que 78, por lo tanto bifurco al nodo 0 (L2)
+    - Leo el nodo 0, insertar el elemento 48 en este nodo 0 produce overflow (L0)
+    - La 1ra mitad de los elementos (3, 15, 34) quedan en el nodo 0 (E0)
+    - La 2da mitad de los elementos (48, 56, 71) quedan en el nuevo nodo 3 (E3)
+    - El elemento más chivo de la 2da mitad (48) es promocionado al nodo padre (E2)
+
+          2: 0(48)3(78)1
+0: (3)(15)(34) 3:(56)(71) 1: (100)(176)
+
+Operación -56:
+    - Leo la raíz, el elemento 56 no se encuentra en este nodo, comparo y bifurco al nodo 3 (L2)
+    - Leo el nodo 3, el elemento 56 efectivamente se encuentra en este nodo, pero con riesgo de underflow (L3)
+    - La política de resolución de underflows es política derecha o izquierda, el hermano adyacente derecho
+    tiene riego de underflow, el hermano adyacente izquierdo no tiene ningun riesgo, por lo tanto se puede
+    redistribuir.
+    - La 1ra mitad de los elementos (3, 15) quedan en el nodo 0 (E0)
+    - La 2da mitad (34, 48, 71) quedan en el nodo 3 (E3)
+    - El elemento más chico de la 2da mitad (34) es promocionado al nodo padre (E2)
+
+        2: 0(34)3(78)1
+0: (3)(15) 3:(48)(71) 1:(100)(176)
+
+Operación -71:
+    - Leo la raíz, el elemento 71 no se encuentra en este nodo, comparo y bifurco al nodo 3 (L2)
+    - Leo el nodo 3, el elemento 71 está en este nodo, pero con riesgo de underflow (L3)
+    - La política de resolución de underflows es política derecha o izquierda, tanto hermano adyacente derecho
+    como izquierdo poseen riesgo de underflow, por lo tanto se debe fusionar con su hermano adyacente derecho.
+    - En el nodo 3 quedan los elementos 48, 71 (elementos del nodo 3), 78 (padre), 100 y 176 (elementos del 
+    nodo 1) (E3, E2, E1)
+
+           2: 0(34)3
+0: (3)(15) 3:(48)(71)(78)(100)(176)

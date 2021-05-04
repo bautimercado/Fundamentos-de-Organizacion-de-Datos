@@ -1,0 +1,74 @@
+9. Dado el siguiente árbol B de orden 4, mostrar cómo quedaría el mismo luego de realizar
+las siguientes operaciones: +2, +10, +95, +60, -40, -102.
+Política de resolución de underflows: derecha.
+            2: 0 (56) 1
+0: (23)(34)(40)     1: (67) (89) (102)
+
+Operación +2:
+    - Leo el raíz, 2 es menor que 56 por lo tanto, tomo su hijo izquierdo que es el nodo 0 (L2)
+    - Leo el nodo 0, al agregar el elemento 2 se produce overflow. (L0)
+    - La 1ra mitad de los elementos (2, 23) quedan en el nodo 0 (E0)
+    - La 2da mitad de los elementos (34,40) quedan en el nuevo nodo 3 (E3)
+    - El elemento más chico de la 2da mitad (34) se promociona al nodo padre (nodo 2) (E2).
+    - El árbol quedaria de la siguiente manera:
+
+            2: 0(34)3(56)1
+0: (2)(23)  3: (40)  1: (67) (89) (102)
+
+Operación +10:
+    - Leo la raíz, 10 es menor que 34, por lo tanto voy a su hijo izquiero que es el nodo 0 (L2)
+    - Leo el nodo 0, al agregar el elemento 10 no se produce overflow, 
+    por lo tanto solo se insertar ordenado (L0, E0)
+    - El árbol queda de esta forma:
+
+
+            2: 0(34)3(56)1
+0: (2)(10)(23)  3: (40)  1: (67) (89) (102)
+
+Operación +95:
+    - Leo la raíz, 95 es mayor que 56, por lo tanto bifurco a su hijo derecho el cual es el nodo 1 (L2)
+    - Leo el nodo 1, al querer insertar ordenado el elemento 95 se produce overflow. (L1)
+    - La 1ra mitad de los elementos (67, 89) quedan en el nodo 1 (E1)
+    - La 2da mitad de los elementos (95, 102) quedan en el nuevo nodo 4 (E4)
+    - El elemento más chico de los elementos de la 2da mitad (95) es promocionado al nodo padre (E2)
+    - El árbol queda de la siguiente manera:
+
+            2: 0(34)3(56)1(95)4
+0: (2)(10)(23)  3: (40)  1: (67)(89) 4:(102)
+
+Operación +60:
+    - Leo la raíz, 60 es mayor que 56 y menor que 95, por lo tanto bifurco al nodo 1 (L2)
+    - Leo el nodo 1, al agregar el nuevo elemento 60 NO se produce overflow, por lo tanto solo inserto
+    ordenado el nuevo elemento (L1, E1)
+    - El árbol queda asi:
+
+            2: 0(34)3(56)1(95)4
+0: (2)(10)(23) 3:(40) 1: (60)(67)(89) 4:(102)
+
+Operación -40:
+    - Leo la raíz, el elemento 40 no está en este nodo, comparo y bifurco al nodo 3 (L2)
+    - Leo el nodo 3, el elemento 40 se encuentra en este nodo y este nodo es terminal, pero al querer eliminar
+    se produce underflow (L3)
+    - La política de resolución de underflows es política derecha, el hermano adyacente derecho no tiene riesgo
+    de underflow por lo tanto la redistribución es accesible.
+    - La 1ra mitad de los elementos (56, 60) quedan en el nodo 3 (E3)
+    - La 2da mitad (67, 89) quedan en el nodo 1 (E1)
+    - El elemento más chico de la 2da mitad (67) es promocionado al nodo padre (E2)
+    - El árbol queda asi:
+
+        2: 0(34)3(67)1(95)4
+0:(2)(10)(23) 3:(56)(60) 1:(89) 4:(102)
+
+Operación -102:
+    - Leo la raíz, el elemento 102 no se encuentra en este nodo, comparo y bifurco al nodo 4 (L2)
+    - Leo el nodo 4, el elemento efectivamente se encuentra en este nodo el cual es un nodo terminal, pero
+    al querer eliminar me produce underflow.
+    - La política de resolución de underflows es política derecha, pero al ser un nodo extremo NO posee un 
+    hermano adyacente derecho, por lo tanto se intentará redistribuir con su hermano adyacente izquierdo
+    - Redistribuir con su hermano adyacente izquierdo produce underflow en dicho nodo, por lo tanto se debe
+    fusionar
+    - Los elementos 89 (nodo 1), 95 (padre) y el vacio del nodo 4 quedan en el nodo 1 (E4, E1, E2)
+    - El árbol queda asi:
+
+         2: 0(34)3(67)1
+0:(2)(10)(23) 3:(56)(60) 1:(89)(95)  

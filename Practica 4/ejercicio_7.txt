@@ -1,0 +1,26 @@
+const
+	M = . . .;
+	
+type
+	t_log = record
+		nro_usuario : integer;
+		nom_usuario : String[15];
+		nombre : String[15];
+		apellido : String[15];
+		cant_mails_enviados : integer;
+	end;
+	
+	nodo = record
+		claves : array[1..M-1] of t_log;
+		hijos : array[1..M] of integer;
+		cant_claves : integer;
+	end;
+	
+	arbol = file of nodo;
+	
+var
+	arbolB : arbol;
+	
+begin
+	assign(arbolB, 'logmail.dat');
+end.

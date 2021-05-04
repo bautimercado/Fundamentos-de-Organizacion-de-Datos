@@ -1,0 +1,35 @@
+12. Dado el siguiente árbol B de orden 5 , mostrar como quedaría el mismo luego de
+realizar las siguientes operaciones: +15, -45, -50.
+Política de resolución de underflows: izquierda.
+                2: 0 (56) 1
+0:(10)(35)(45)(50)       1:(66)(70)(88)(120)
+
+Operación +15:
+    - Leo la raíz, como 15 es menor que 56, bifurco a su hijo izquierdo (L2)
+    - Leo el nodo 0, el cual tiene riesgo de Overflow (L0)
+    - La 1ra mitad de las claves (10, 15) se quedan en el nodo 0 (E0)
+    - La 2da mitad (35, 45, 50) van al nuevo nodo 3 (E3)
+    - La clave más chica de la 2da mitad (35) se promociona al nodo 2 (E2)
+
+            2: 0(35)3(56) 1
+0:(10)(15)  3:(45)(50)  1:(66)(70)(88)(120)
+
+Operación -45:
+    - Leo la raíz, la clave 45 no esta en este nodo, comparo y bifurco al nodo 3 (L2)
+    - Leo el nodo 3, la clave 45 se encuentra en este nodo y es un nodo terminal sin riesgo de underflow,
+    por lo tanto elimino la clave 45 (L3, E3)
+
+        2: 0(35)3(56) 1
+0:(10)(15)  3:(50)  1:(66)(70)(88)(120)
+
+Operación -50:
+    - Leo la raíz, la clave 50 no se encuentra en este nodo, comparo y bifurco al nodo 3 (L2)
+    - Leo el nodo 3, la clave 50 esta en este nodo y es un nodo terminal pero con riesgo de underflow (L3)
+    - La política de resolución de underflows es política izquierda, el hermano adyacente izquierdo del nodo 3
+    NO posee riesgo de underflow, se procede con la reasignación.
+    - La 1ra mitad de las claves (10) quedan en el nodo 0 (E0)
+    - La 2da mitad de las claves (15, 35) quedan en el nodo 3 (E3)
+    - La clave más chica de la 2da mitad (15) es promocionada al nodo padre (E2)
+
+     2: 0(15)3(56) 1
+0:(10)  3:(35)  1:(66)(70)(88)(120)

@@ -1,0 +1,51 @@
+11. Dado el siguiente árbol B de orden 5, mostrar como quedaría el mismo luego de realizar
+las siguientes operaciones: +450, -485, -511, -614.
+Política de resolución de underflows: derecha.
+             2: 0 (315) 1 (485) 4 (547) 5 (639) 3
+0:(148)(223) 1:(333)(390)(442)(454) 4:(508)(511) 5:(614)(633) 3:(789)(915)
+
+Operación +450:
+    - Overflow en el nodo 1 y nodo 2, aumenta la altura del árbol B y se crean los nodos 6, 7, 8
+    - L2, L1, E1, E6, E2, E7, E8
+
+                              8:2(485)7
+        2: 0 (315) 1 (442) 6                7: 4(547)5(639)3
+0:(148)(223) 1:(333)(390) 6:(450)(454) 4:(508)(511) 5:(614)(633) 3:(789)(915)
+
+Operación -485:
+    - Como el elemento 485 no se encuentra en un nodo terminal, se debe reemplazar por la menor
+    clave del subárbol derecho (el elemento 508 del nodo 4) (L8, L7, L4, E4, E8)
+    - Borrar el elemento 485 del nodo 4 NO me produce underflow, por lo tanto solo se elimina la clave 485 (E4)
+
+                            8:2(508)7
+        2: 0 (315) 1 (442) 6                7: 4(547)5(639)3
+0:(148)(223) 1:(333)(390) 6:(450)(454) 4:(511) 5:(614)(633) 3:(789)(915)
+
+Operación -511:
+    - Leo la raíz, el elemento 511 NO se encuentra en este nodo, comparo y bifurco al nodo 7 (L8)
+    - Leo el nodo 7, la clave 511 tampoco esta en este nodo, comparo y bifurco al nodo 4 (L7)
+    - Leo el nodo 4, la clave 511 efectivamente se encuentra en este nodo pero con riesgo de underflow. (L4)
+    - La política de resolución de underflows es política derecha, el hermano adyacente derecho no tiene riesgo
+    de underflow, por lo tanto se puede reasignar.
+    - La 1ra mitad de los elementos (547), quedan en el nodo 4. (E4)
+    - La 2da mitad de los elementos (614, 633) quedan en el nodo 5. (E5)
+    - El elemento más chico de la 2da mitad (614) es promocionado al nodo padre (E7)
+
+                            8:2(508)7
+        2: 0 (315) 1 (442) 6                7: 4(614)5(639)3
+0:(148)(223) 1:(333)(390) 6:(450)(454) 4:(547) 5:(633) 3:(789)(915)
+
+Operación -614:
+    - Leo la raíz, la clave 614 no se encuentra en este nodo, comparo y bifurco al nodo 7 (L8)
+    - Leo el nodo 7, la clave 614 se encuentra en este nodo pero NO está en un nodo terminal, por lo tanto
+    se debe reemplazar por la menor clave del subárbol derecho (L7, L5, E7, E5)
+    - Leo el nodo 5, ahora la clave 614 se encuentra en este nodo terminal pero con riesgo de underflow
+    - La política de resolución de underflows es política derecha, el hermano adyacente derecho no tiene riesgo
+    de underflow, por lo tanto se puede reasignar.
+    - La 1ra mitad de los elementos (639) quedan en el nodo 5. (E5)
+    - La 2da mitad (789, 915) quedan en el nodo 3. (E3)
+    - El elemento más chico (789) de la 2da mitad es promocionado al nodo padre (E7)
+
+                            8:2(508)7
+        2: 0 (315) 1 (442) 6                7: 4(614)5(789)3
+0:(148)(223) 1:(333)(390) 6:(450)(454)   4:(547) 5:(639) 3:(915)

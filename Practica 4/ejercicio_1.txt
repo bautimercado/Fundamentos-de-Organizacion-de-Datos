@@ -1,0 +1,27 @@
+const
+	M = . . .; //orden del árbol B
+	
+type
+	tMedico = record
+		nombre : String[15];
+		apellido : String[15];
+		dni : String[9];
+		matricula : integer;
+		anioIngreso : integer;
+	end;
+	
+	nodo = record
+		cant_claves : integer;
+		claves : array[1..M-1] of tMedico;
+		hijos : array[1..M] of integer;
+	end;
+	
+	arbol = file of nodo;
+	
+var
+	arbolB = arbol;
+	
+{El dato que elijo como clave es la matricula.
+Tambien se podría con el DNI, ya que un medico tiene
+matricula y DNI unicos.Elijo la matricula porque es un integer, ocupa
+solo 4 bytes, DNI en este caso ocupa 9 bytes}

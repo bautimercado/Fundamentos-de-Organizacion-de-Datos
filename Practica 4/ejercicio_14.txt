@@ -1,0 +1,5 @@
+14. Dadas las siguientes operaciones, mostrar la construcción paso a paso de un árbol B de
+orden 5:
+Política de resolución de underflows: izquierda.
++80, +50, +70, +120, +23, +52, +59, +65, +30, +40, +45, +31, +34, +38, +60, +63, +64, -23,
+-30, -31, -40, -45, -38.

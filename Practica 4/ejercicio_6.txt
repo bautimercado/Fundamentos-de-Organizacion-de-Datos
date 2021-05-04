@@ -1,0 +1,73 @@
+						2: 0 (320) 1 (490) 4 (555) 5 (641) 3
+0: (13)(153) 1: (325)(341)(431)(460) 4: (500)(507) 5: (608)(633) 3: (790)(923)
+
+Arbol B de orden 5
+raiz = nodo 2
+
+Operación +445:
+	- Leo la raíz, tomo el nrr 1 (320 < 445 < 490) y voy a ese nodo.
+	- Leo el nodo 1, como el árbol es de orden 5 y el nodo 1 tiene 4 elementos, se produce un overflow
+	- La primera mitad de los elementos (325 341) quedan en el nodo 1, la segunda mitad (431 445 460) va a un nuevo nodo (nodo 6)
+	El elementos más chico de la 2da mitad (431) se promociona al nodo padre (nodo 2).
+	- Al promocionar el elemento 431 al nodo 2, se produce otro overflow.
+	- La primera mitad de los elementos 0(320) 1(431)6 quedan en el nodo 2, la segunda mitad (490 555 641) van a un nuevo nodo (nodo 7)
+	El elemento más chico de la 2da mitad (490) se promociona al nuevo nodo padre cuyo nrr es 8
+	- Se escribe dicho padre con dicho elemento y sus respectivos hijos, el árbol quedaria de la siguiente forma:
+	
+	
+							  8:2(490)7
+		  2: 0(320)1(431)6                        7:4(555)5(641)3
+0: (13)(153) 1: (325)(341) 6: (445 460) 4: (500)(507) 5: (608)(633) 3: (790)(923) 
+
+	LEC/ESC = L8, L1, E1, E6, E2, E7, E8
+	
+Operación -490:
+	- Leo la raíz, justamente el dato a eliminar se encuentra en dicho nodo, pero hay que llevarlo a un nodo terminal
+	- Leo el nodo 7, tomo el hijo izquierdo del menor elemento (nodo 4)
+	- Leo el nodo 4, el menor elemento es el 500, este elemento ahora estará en la raíz (nodo 8) y el elemento de la raíz (490) estará 
+	en este nodo 4
+	- Escribo en el nodo 8 el elemento menor del nodo 4
+	- Escribo en el nodo 4 el elemento a eliminar, y lo elimino.
+	- El árbol queda de la siguiente manera:
+	
+	
+								8:2(500)7
+		  2: 0(320)1(431)6                        7:4(555)5(641)3
+0: (13)(153) 1: (325)(341) 6: (445 460)  4: (507) 5: (608)(633) 3: (790)(923)
+
+	lec/esc = L8, L7, L4, E4, E8
+
+Operación -507:
+	- Leo la raíz, el elemento que quiero borrar no está en este nodo, como 507 > 500, voy al hijo der de 500 (nodo 7)
+	- Leo el nodo 7, el elemento que quiero borrar tampoco esta en este nodo, comparo y veo que 507 < 555, voy al hijo
+	izquierdo de 555 (nodo 4)
+	- Leo el nodo 4 y el elemento a borrar efectivamente se encuentra en este nodo pero si lo borro me genera underflow
+	- La política de resolución es política izquierda, pero justamente el nodo 4 NO posee un nodo hermano adyacente
+	izquierdo, por lo tanto intento redistribuir con su hermano adyacente derecho
+	- El hermano adyacente derecho (nodo 5) no posee riesgo de underflow, por lo tanto esta solución es posible.
+	- Leo nuevamente nodo 7, leo 5, la primera mitad de los elementos (555) quedan en el nodo 4 (escribo nodo 4)
+	- La segunda mitad (608 633) quedan en el nodo 5 (escribo nodo 5)
+	- El menor elemento de la segunda mitad (608) es promocionado al nodo padre (escribo nodo 7)
+	- La figura del árbol queda de la siguiente manera:
+	
+								8:2(500)7
+		  2: 0(320)1(431)6                        7:4(608)5(641)3
+0: (13)(153) 1: (325)(341) 6: (445 460)  4: (555) 5: (633) 3: (790)(923)
+
+	lec/esc = l8, l7, l4, l5, e4, e5, e7
+
+Operación -608:
+ 	- Leo la raíz, el elemento no está en ese nodo
+ 	- Leo el nodo 7, encontré el elemento pero el nodo 7 no es un nodo terminal.
+ 	- Intercambio el elemento 608 por el elemento 633 del nodo 5 (el menor elemento del hijo derecho de 608)
+ 	- Al querer borrar el elemento 608 del nodo 5 se produce underflow
+ 	- La política de resolución es política izquierda, pero el hermano adyacente izquierdo está al limite, por lo tanto debo compactar.
+ 	- Tomo el elemento del nodo 4, el padre (608) y el elemento del nodo 5 (vacío), el nodo 5 queda eliminado. Estos elementos se compactan
+ 	en el nodo 4. En el nodo 7 solo queda el elemento 641.
+ 	- El árbol queda asi:
+ 	
+								8:2(500)7
+		  2: 0(320)1(431)6                        7:4(641)3
+0: (13)(153) 1: (325)(341) 6: (445 460)  4: (555)(633) 3: (790)(923)
+
+	lec/esc = l8, l7, l5, l4, e4, e5, e7

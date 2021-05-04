@@ -1,0 +1,68 @@
+function buscar(NRR, clave, NRR_encontrado, pos_encontrada)
+begin
+	if (nodo = null)
+		buscar := false; {clave no encontrada}
+	else
+		posicionarYLeerNodo(A, nodo, NRR);
+		if (claveEncontrada(A, nodo, clave, pos)) then
+			NRR_encontrado := NRR; {NRR actual)
+			pos_encontrada := pos; {posición dentro del array}
+		end
+		else
+			buscar(nodo.hijo[pos], clave, NRR_encontrado, pos_encontrada)
+end;
+
+Para la primera llamada, el parámetro NRR contiene la posición de la raíz del árbol.
+{NRR : Nro. nodo
+pos: posición dentro del array.
+nodo : nodo actual, leido
+A : archivo}
+
+a.- PosicionarYLeerNodo(): Indique qué hace y la forma en que deben ser enviados
+los parámetros (valor o referencia).
+
+	Esta función se posiciona en el elemento indicado por el NRR dentro del archivo A,
+	una vez posicionado, se lee dicho elemento del archivo y ese elemento queda en
+	la variable nodo. A debe ser por valor, nodo por referencia y NRR por valor.
+	
+b.- claveEncontrada(): Indique qué hace y la forma en que deben ser enviados los
+parámetros (valor o referencia). ¿Cómo lo implementaría?
+
+	Esta función devuelve un booleano indicando si se encontró o no la clave.
+	Recorre el nodo buscando la clave (en el array de claves del nodo), en la variable pos
+	queda el valor de la posición donde se encontró a la clave o la pos en el array de hijos
+	donde se debe seguir buscando. 
+	
+function claveEncontrada(A, nodo, clave, pos): boolean;
+begin
+	buscar eficientemente en el array de claves a la clave
+	
+	si la encontre, asigno en pos la posición donde encontre a la clave dentro del array de claves.
+	
+	sino, asigno en pos la posición dentro del array de hijos, ese valor indica en que nodo debo seguir buscando
+	(en función de si clave es mayor o menor al ultimo elemento comparado)
+	
+end;
+
+c.- ¿Existe algún error en este código? En caso afirmativo, modifique lo que considere
+necesario.
+
+function buscar(NRR : integer, clave : <tipo_dato>, var NRR_encontrado, pos_encontrada : integer) : boolean;
+var
+	A : arbol;
+	nodo : t_nodo;
+begin
+	posicionarYLeerNodo(A, nodo, NRR);
+	if (nodo = null)
+		buscar := false {clave no encontrada}
+	else
+		if (claveEncontrada(A, nodo, clave, pos)) then begin
+			NRR_encontrado := NRR; {NRR actual)
+			pos_encontrada := pos; {posición dentro del array}
+			buscar := true;
+		end
+		else
+			buscar := buscar(nodo.hijo[pos], clave, NRR_encontrado, pos_encontrada)
+end;
+
+

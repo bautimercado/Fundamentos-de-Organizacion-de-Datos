@@ -52,7 +52,7 @@ procedure darDeBaja (var archivo : archivo_aves);
 var
 	unCodigo : str15;
 begin
-	writeln('Ingrese un codigp de ave que desee eliminar'); readln(unCodigo);
+	writeln('Ingrese un codigo de ave que desee eliminar'); readln(unCodigo);
 	
 	while (unCodigo <> corte) do begin
 		bajaLogica(archivo, unCodigo);
@@ -60,33 +60,54 @@ begin
 	end; 
 end;
 
-procedure llevarAlFinal (var archivo : archivo_aves; unAve : tAve; pos : integer);
-var
-	aux : tAve;
-begin
-	seek(archivo, filesize(archivo) - 1);
-	read(archivo, aux);
-	seek(archivo, filepos(archivo) - 1);
-	write(archivo, unAve);
-	seek(archivo, pos);
-	write(archivo, aux);
-	seek(archivo, filepos(archivo) - 1);
-	truncate(archivo);
-end;
-
 procedure compactarArchivo (var archivo : archivo_aves);
 var
-	unAve : tAve;
+	unAve, ultimoReg : tAve;
+	borrados, ultimaPos, actualPos : integer;
 begin
 	reset(archivo);
-	leerRegistro(archivo, unAve);
+	//borrados contabiliza la cantidad de registros eliminados
+	//sirve para tener que hacer un solo truncate...es ineficiente hacer muchos
+	borrados := 0;
+	//ultimaPos me indica el ultimo nrr de un registro valido (codigo <> marca_de_borrado)
+	ultimaPos := filesize(archivo) - 1;
 
-	while (unAve.codigo <> valorAlto) do begin
-		if (unAve.codigo = '***') then 
-			llevarAlFinal(archivo, unAve, (filepos(archivo) - 1));
-		leerRegistro(archivo, unAve);
+	//no es necesario el leer xq filepos(archivo) < ultimaPos me marca el fin del recorrido 
+	while (filepos(archivo) < ultimaPos) do begin
+		read(archivo, unAve);
+		//si el registro actual tiene la marca
+		if (unAve.codigo = '***') then begin
+			//sumo un borrado
+			borrados += 1;
+			//guardo al posición actual
+			actualPos := filepos(archivo) - 1;
+			//me paro en el ultimo registro (indicado por ultimaPos) y lo leo
+			seek(archivo, ultimaPos);
+			read(archivo, ultimoReg);
+			//mientras el ultimo registro este borrado y la posicion donde encontre el reg con la marca sea menor a la
+			//ultima pos
+			while ((ultimoReg.codigo = '***') and (actualPos < ultimaPos)) do begin
+				//contabilizo los borrados, pueden haber registros borrados al final
+				borrados += 1;
+				//si el ultimo reg es un reg borrado, actualizo el contador de la ultima posicion
+				ultimaPos -= 1;
+				seek(archivo, ultimaPos);
+				read(archivo, ultimoReg);
+			end;
+			//si el ultimo registro no es un registro a borrar, lo llevo al registro que estaba borrado
+			if (ultimoReg.codigo <> '***') then begin
+				//coloco la marca de borrado al final
+				ultimaPos -= 1;
+				{seek(archivo, ultimaPos);
+				write(archivo, unAve);}
+				seek(archivo, actualPos);
+				write(archivo, ultimoReg);
+			end;
+		end;
 	end;
 	
+	seek(archivo, filesize(archivo) - borrados);
+	truncate(archivo);
 	close(archivo);
 end;
 

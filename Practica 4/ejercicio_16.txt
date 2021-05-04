@@ -1,0 +1,4 @@
+16. Dada las siguientes operaciones, mostrar cómo se construye el árbol B de orden 4: +65,
++89, +23, +45, +20, +96, +10, +55, -23, +110, +50, -10, +25, -50, -45, +120, +130, +70, +75, +73,
++100, -120, -110.
+Política de resolución de underflows: derecha.

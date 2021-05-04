@@ -1,0 +1,167 @@
+13. Dada las siguientes operaciones, mostrar la construcción paso a paso de un árbol B de
+orden 4: +50 , +70, +40, +15, +90, +120, +115, +45, +30, +100, +112, +77, -45, -40, -50, -90, -100.
+Política de resolución de underflows: izquierda o derecha.
+
+Operación +50:
+
+    0: (50)
+
+Operación +70:
+    0: (50)(70)
+
+Operación +40:
+    0: (40)(50)(70)
+
+Operación +15:
+    - Leo la raíz (L0), este nodo posee riesgo de overflow
+    - La 1ra mitad de las claves ordenadas (15, 40) quedan en el nodo 0 (E0)
+    - La 2da mitad de las claves (50, 70) pasan a un nuevo nodo cuyo nrr es 1 (E1)
+    - La menor clave de la 2da mitad (50) se promociona al nuevo padre y nueva raíz
+    del árbol B cuyo nrr es 2 (E2)
+
+        2: 0(50)1
+ 0: (15)(40)   1: (70)
+
+Operación +90:
+    - Leo la raíz, como 90 es mayor a 50, leo su hijo derecho y bifurco a ese nodo (L2)
+    - Leo el nodo 1, el cual NO tiene riesgo de overflow, por lo tanto inserto ordenado
+    la clave 90 (L1, E1)
+
+        2: 0(50)1
+ 0: (15)(40)   1: (70)(90)
+
+Operación +120:
+    - Leo la raíz, 120 es mayor que 50, por lo tanto bifurco a su hijo derecho. (L2)
+    - Leo el nodo 1, este nodo no tiene riesgo de overflow, por lo tanto inserto ordenado la
+    clave 120 (L1, E1)
+
+        2: 0(50)1
+ 0: (15)(40)   1: (70)(90)(120)
+
+Operación +115:
+    - Leo la raíz, 115 es mayor que 50, por lo tanto bifurco a su hijo derecho (L2)
+    - Leo el nodo 1, este nodo posee riesgo de overflow. (L1)
+    - La 1ra mitad de las claves (70, 90) quedan en el nodo 1.(E1)
+    - La 2da mitad de las claves (115, 120) van al nuevo nodo 3(E3)
+    - La menor clave de la 2da mitad (115) es promocionada al nodo padre (E2)
+
+          2: 0(50)1(115)3
+ 0: (15)(40)  1: (70)(90)  3:(120)
+
+ Operación +45:
+    - Leo la raíz, 45 es menor que 50, bifurco a su hijo izquierdo (L2)
+    - Leo el nodo 0, el cual no tiene riesgo de overflow, inserto ordenado la clave 45 (L0, E0)
+
+            2: 0(50)1(115)3
+ 0: (15)(40)(45) 1: (70)(90) 3: (120)
+
+Operación +30:
+    - Leo la raíz, 30 es menor que 50, bifurco a su hijo izquierdo (L2)
+    - Leo el nodo 0, este nodo posee riesgo de overflow (L0)
+    - La 1ra mitad de las claves ordenadas (15, 30) quedan en el nodo 0 (E0)
+    - La 2da mitad (40, 45) se va al nuevo nodo 4 (E4)
+    - La clave más chica de la 2da mitad (40) es promocionada al nodo padre (E2)
+
+        2: 0(40)4(50)1(115)3
+ 0: (15)(30) 4:(45) 1: (70)(90) 3: (120)
+
+Operación +100:
+    - Leo la raíz, 100 es mayor que 50 y menor que 115, por lo tanto bifurco al nodo 1 (L2)
+    - Leo el nodo 1, el cual no posee riesgo de overflow, inserto ordenado la clave 100 (L1, E1)
+
+        2: 0(40)4(50)1(115)3
+0: (15)(30) 4:(45) 1: (70)(90)(100) 3: (120)
+
+Operación +112
+    - Leo la raíz, 112 es mayor que 50 y menor que 115, bifurco al nodo 1 (L2)
+    - Leo el nodo 1, el cual tiene riesgo de overflow (L1)
+    - La 1ra mitad de los elementos ordenados (70,90) quedan en el nodo 1 (E1)
+    - La 2da mitad (100, 112) van al nuevo nodo 5 (E5)
+    - El elemento más chico de la 2da mitad (100) es promocinado al nodo padre, el cual 
+    tiene riesgo de overflow
+    - Nuevamente, la 1ra mitad de las claves ordenadas (40, 50) se quedan en el nodo 2 (E2)
+    - La 2da mitad (100, 115) se van al nuevo nodo 6 (E6)
+    - La clave menor de la 2da mitad (100) es promocionado al nuevo padre y nueva raíz del árbol B (E7) 
+
+                     7: 2(100)6
+    2: 0(40)4(50)1               6: 5(115)3 
+0:(15)(30) 4:(45) 1:(70)(90)  5:(112) 3: (120)
+
+Operación +77:
+    - Leo la raíz, 77 es menor que 100, por lo tanto bifurco al nodo 2. (L7)
+    - Leo el nodo 2, 77 es mayor que 50, por lo tanto bifurco al nodo 1. (L2)
+    - Leo el nodo 1, este nodo no tiene riesgo de overflow, entonces inserto ordenado
+    la clave 77 (L1, E1)
+
+                      7: 2(100)6
+      2: 0(40)4(50)1                 6: 5(115)3 
+0:(15)(30) 4:(45) 1:(70)(77)(90)  5:(112) 3: (120)
+
+
+Operación -45:
+    - Leo la raíz, la clave 45 no se encuentra en este nodo, comparo y bifurco al nodo 2 (L7)
+    - Leo el nodo 2, la clave 45 tampoco esta en este nodo, comparo y bifurco al nodo 4 (L2)
+    - Leo el nodo 4, la clave 45 efectivamente se encuentra en este nodo pero tambien tiene 
+    riesgo de underflow. (L4)
+    - La política de resolución de underflows es política izquierda o derecha, el hermano adyacente
+    izquierdo no posee riesgo de underflow, por esta razón se puede reasignar.
+    - La 1ra mitad de los elementos (15) quedan en el nodo 0 (E0)
+    - La 2da mitad de los elementos (30, 40) quedan en el nodo 4 (E4)
+    - El elemento más chico la 2da mitad (30) va a ser el nuevo padre en el nodo 2 (E2).
+
+                      7: 2(100)6
+      2: 0(30)4(50)1                 6: 5(115)3 
+0:(15) 4:(40) 1:(70)(77)(90)       5:(112) 3: (120)
+
+Operación -40:
+    - Leo la raíz, la clave 40 no esta en este nodo, comparo y bifurco al nodo 2 (L7)
+    - Leo el nodo 2, la clave 40 tampoco esta en este nodo, comparo y bifurco al nodo 4 (L2)
+    - Leo el nodo 4, la clave 40 SI esta en este nodo pero este nodo también tiene riesgo de underflow (L4)
+    - La política de resolución de underflows es política izquierda o derecha, el hermano adyacente
+    izquierdo posee riesgo de underflow, por lo tanto no se puede reasignar con el nodo 0, en cambio el 
+    hermano adyacente derecho NO tiene riesgo alguno entonces se reasigna con el nodo 1.
+    - La 1ra mitad de los elementos (50, 70) quedan en el nodo 4 (E4)
+    - La 2da mitad de los elementos (77, 90) quedan en el nodo 1 (E1)
+    - El elemento menor de la 2da mitad (77) se promociona al nodo 2 (E2)
+
+                       7: 2(100)6
+      2: 0(30)4(77)1                 6: 5(115)3 
+0:(15) 4:(50)(70) 1:(90)           5:(112) 3: (120)
+
+Operación -50:
+    - Leo la raíz, la clave 50 no está en este nodo, comparo y bifurco al nodo 2 (L7)
+    - Leo el nodo 2, la clave 50 tampoco esta en este nodo, comparo y bifurco al nodo 4 (L2)
+    - Leo el nodo 4, la clave 50 SI esta en este nodo y NO tiene riesgo de underflow (L4, E4)
+
+                7: 2(100)6
+    2: 0(30)4(77)1          6: 5(115)3 
+0:(15) 4:(70) 1:(90)     5:(112) 3: (120)
+
+
+Operación -90:
+    - Leo la raíz, la clave 90 no está en este nodo, comparo y bifurco al nodo 2 (L7)
+    - Leo el nodo 2, la clave 90 tampoco esta en este nodo, comparo y bifurco al nodo 1 (L2)
+    - Leo el nodo 1, la clave 90 efectivamente se encuentra en este nodo pero con reisgo de underflow(L1)
+    - La política de resolución de underflows es política izquierda o derecha, el hermano adyacente
+    izquierdo posee riesgo de underflow y al ser un nodo extremo no tiene hermano adyacente derecho. Se 
+    debe compactar con el hermano adyacente izquierdo.
+    - En el nodo 4 quedan los elementos 70 (elemento del nodo 4), 77(elemento padre del nodo 2)
+    
+            7: 2(100)6
+   2: 0(30)4             6: 5(115)3 
+0:(15) 4:(70)(77)     5:(112) 3: (120)
+
+Operación -100:
+    - Leo la raíz, la clave 100 se encuentra en este nodo pero no es un nodo terminal, por lo tanto se debe
+    reemplazar por la menor clave del subárbol derecho (L7, L6, L5, E5, E7)
+    - El nodo 5, ahora con la clave 100 que es la que se debe eliminar, tiene riesgo de underflow
+    - La política de resolución de underflows es política izquierda o derecha, el nodo 5 no posee hermano
+    adyacente izquierdo y el unico hermano que tiene esta al limite de cantidad de elementos minimos,
+    entonces se debe compactar. (E5, E6, E3)
+    - Compactar los nodos 5, 3 y 6 me produce otro underflow. El único hermano adyacente del nodo 6 tiene 
+    riesgo de underflow, por lo que se debe nuevamente compactar (E2, E7, E6)
+    - La altura del árbol disminuye.
+
+        2: 0(30)2(112)5
+0:(15) 4:(70)(77)  5: (115)(120) 
+     

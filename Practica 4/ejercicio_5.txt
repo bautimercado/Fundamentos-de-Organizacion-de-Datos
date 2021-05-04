@@ -1,0 +1,20 @@
+Overflow:
+	El overflow se da cuando en un nodo quiero agregar un elemento pero que el nodo no admita más elementos (pasaria su limite de capacidad).
+	Por lo tanto, hay que llevar a cabo una serie de pasos en la que la 1ra mitad de los nodos quedan en el nodo que sufrió overflow, la 2da 
+	mitad se traslada a un nuevo nodo y el menor de los elementos de la 2da mitad es promocionado al nodo padre.
+	
+Underflow:
+	El underflow se da cuando quiero eliminar un elemento de un nodo terminal pero este nodo se quedaria con una cantidad de elementos menor al
+	minimo que debe tener, entonces hay que llevar a cabo la redistribución.
+	
+Redistribución:
+	Es un proceso por el cual el nodo que sufre underflow se intenta fusionar con su hermano adyacente (depende de la política). Se toman los
+	elementos del hermano adyacente, el elemento del padre y los elementos restantes del nodo con underflow, se reacomodan de manera que cada
+	nodo quede lo más equitativo posible.
+	
+Compactación:
+	Si el proceso de redistribución NO se puede hacer (causa underflow en el hermano adyacente), se toman los elementos de ese hermano
+	adyacente, el elemento del padre y los elementos del nodo con underflow generando un unico nodo con todos los elementos (ordenados).
+
+El proceso de redistribución se da cuando se produce Underflow en un nodo, el proceso de compactación ocurre cuando la redistribución causa
+otro underflow en el nodo hermano adyacente.
