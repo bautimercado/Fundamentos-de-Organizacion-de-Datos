@@ -60,6 +60,21 @@ begin
 	end; 
 end;
 
+<<<<<<< HEAD
+=======
+procedure llevarAlFinal (var archivo : archivo_aves; unAve : tAve; pos, borrados : integer);
+var
+	aux : tAve;
+begin
+	seek(archivo, filesize(archivo) - 1);
+	read(archivo, aux);
+	seek(archivo, filepos(archivo) - 1);
+	write(archivo, unAve);
+	seek(archivo, pos);
+	write(archivo, aux);
+end;
+
+>>>>>>> 2eb44ed2ac30eeaacbe2c15edd44649c026baeea
 procedure compactarArchivo (var archivo : archivo_aves);
 var
 	unAve, ultimoReg : tAve;
@@ -97,9 +112,14 @@ begin
 			//si el ultimo registro no es un registro a borrar, lo llevo al registro que estaba borrado
 			if (ultimoReg.codigo <> '***') then begin
 				//coloco la marca de borrado al final
+<<<<<<< HEAD
 				ultimaPos -= 1;
 				{seek(archivo, ultimaPos);
 				write(archivo, unAve);}
+=======
+				seek(archivo, ultimaPos);
+				write(archivo, unAve);
+>>>>>>> 2eb44ed2ac30eeaacbe2c15edd44649c026baeea
 				seek(archivo, actualPos);
 				write(archivo, ultimoReg);
 			end;
